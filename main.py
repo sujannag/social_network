@@ -9,7 +9,6 @@ class SocialNetwork:
 		# List containing name of all the people in the social network.
 		self.social_network = []
 		self.names_list = []
-		self.object_names_list = []
 		self.dict_names_objects = {}
 		
 	
@@ -29,14 +28,7 @@ class SocialNetwork:
 		
 		# close the file
 		file.close()
-'''	
-		# Parse the file for ',' 
-			
-
-			
-		
-		print self.social_network
-'''
+	
 	#def getCountPeople(self):
 		# Returns the total number of people present in the social Network
 	#	return len(self.social_network)
@@ -69,7 +61,6 @@ if __name__ == '__main__':
 	# get the names from the name list
 	#print(sc.names_list)
 
-	object_names = ['0', '0']
 	for names_line in sc.names_list:
 		# strip the names_line of '\r' and '\n', else might result in multiple entries
 		# For e.g. SAM_SWAIT and SAM_SWAIT\r\n
@@ -81,37 +72,21 @@ if __name__ == '__main__':
 		# as per the use case scenario there are two names in a single line
 		for idx in xrange(2):
 			# check if the names are encountered for the first time
-			#if names_line[idx] not in sc.social_network:
 			if (sc.dict_names_objects.has_key(names_line[idx]) != True):
-				#print("0:",names_line[0])
-				#print("1:",names_line[1])
-				print("name:",names_line[idx], "idx:",idx)
+			#if (names_line[idx] in sc.dict_names_objects != True):
 				sc.dict_names_objects.update({names_line[idx]: Vertex(names_line[idx])})	
-			print(sc.dict_names_objects)
-			print("\n")
-
-			#print(sc.dict_names_objects.get('MYLES_JEFFCOAT'))
 
 			# We have all the names and their objects in a pair now
 			# Next task would be to create a tree for every pair
 			
-			#print len(sc.dict_names_objects)
-			#object_names[0].add_friend(object_names[1])
-			#sc.object_names_list.append(object_names[0])
-			#sc.object_names_list.append(object_names[1])
 		person_1_obj = sc.dict_names_objects[names_line[0]]
 		person_2_obj = sc.dict_names_objects[names_line[1]]
 		person_1_obj.add_friend(person_2_obj)
-	#print (sc.dict_names_objects.keys())		
-	#print (sc.dict_names_objects.values())		
-	
+
 	print(sc.dict_names_objects['MYLES_JEFFCOAT'].friends)	
 	print(sc.dict_names_objects['LANNY_TIBURCIO'].friends)	
 	print(sc.dict_names_objects['MARTIN_OMERSA'].friends)	
-	#print len(sc.social_network)	
-	#print (sc.social_network)	
-
-
+	
 	# if already present dont add in the list, else add them in the vertex and add in the list
 
 
