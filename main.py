@@ -1,3 +1,5 @@
+import Util
+
 '''
 Read a text file to get the total number of people present in the social network.
 Append names of the people in a list.
@@ -7,39 +9,81 @@ class SocialNetwork:
 	
 	def __init__(self):
 		# List containing name of all the people in the social network.
-		self.social_network = []
-		self.names_list = []
+		# self.list_social_network_name = []
+		# self.list_social_network_vertex = []
+		self.list_names = []
 		self.dict_names_objects = {}
-		
-	
-	# Read the file and parse it for ',' and new line
-	def readFile(self, filename):
-		
-		'''
-		The file contains name of all the people in the social network, separated by a ','. In this case
-		each line contains 2 names showing the relationship between the two names
-		'''
 
-		# read the file
-		file = open (filename, "r")
-		
-		# Read the names from the file and update the list
-		self.names_list = file.readlines()
-		
-		# close the file
-		file.close()
+	#
+	#
+	#
+	def prepareNetworkList(self, filename):
+
+		# get an instance of the Util helper class
+		u = Util.util()
+
+		# read the content of the social network file.
+		self.list_names = u.readFile(filename)
+
+		for names_line in self.list_names:
+			# strip the names_line of '\r' and '\n', else might result in multiple entries
+			# For e.g. SAM_SWAIT and SAM_SWAIT\r\n
+			names_line = names_line.strip()
+			
+			# parse the file on the delimiter ',' 
+			names_line = names_line.split(',')
+
+			# as per the use case scenario there are two names in a single line
+			for idx in xrange(2):
+				# check if the names are encountered for the first time
+				if (self.dict_names_objects.has_key(names_line[idx]) != True):
+				#if (names_line[idx] in sc.dict_names_objects != True):
+					self.dict_names_objects.update({names_line[idx]: Vertex(names_line[idx])})	
+
+			# We have all the names and their objects in a pair now
+			# Next task would be to create a tree for every pair	
+			person_1_obj = self.dict_names_objects[names_line[0]]
+			person_2_obj = self.dict_names_objects[names_line[1]]
+			person_1_obj.addFriend(person_2_obj)
 	
-	#def getCountPeople(self):
+	#
+	# 
+	#
+	def getNameList(self):
+		
+		#
+		return self.dict_names_objects.keys()
+
+	#
+	# 
+	#
+	def getVerticesList(self):
+		
+		# 
+		return self.dict_names_objects.values()	
+
+	#
+	# 
+	#
+	def getCountOfPeopleInNetwork(self):
+
 		# Returns the total number of people present in the social Network
-	#	return len(self.social_network)
+		return len(self.dict_names_objects.keys())
 
+
+#
+#
+#
 class Vertex:
 
 	def __init__(self, vertex):
 		self.name = vertex;
 		self.friends = []
 
-	def add_friend(self, friend):
+	#
+	#
+	#
+	def addFriend(self, friend):
 		if isinstance(friend, Vertex):
 
 			# if friend is not already in the list:
@@ -53,42 +97,103 @@ class Vertex:
 		else:
 			return False
 
+#
+#
+#
+class Graph:
+    
+    def __init__(self):
+        self.vertices = {}
+
+	#
+	#
+	#
+    def addVertices(self, vertices):
+        for vertex in vertices:
+		    if isinstance(vertex, Vertex):
+			    self.vertices[vertex.name] = vertex.friends
+
+	#
+	#
+	#
+    def findShortestPath(self, start, goal):
+	
+		# maintain a list of all the explored nodes
+	    explored_path = []
+	
+		# Maintain a queue to keep track of the paths to be checked
+	    queue = [[start]]
+
+	    if start == goal:
+			# Start is same as the goal. Return the same.
+		    return start
+
+		# keep checking until all the paths have been checked.
+	    while queue:
+    
+			# pop the first path from the queue
+		    path = queue.pop(0)
+		
+			# get the last node from the path
+		    node = path[-1]
+		
+		    if node not in explored_path:
+			    friends_list = self.vertices[node]
+			
+				# go through all friend nodes, construct a new path and
+				# push it into the queue
+			    for friend in friends_list:
+				    new_path = list(path)
+				    new_path.append(friend)
+				    queue.append(new_path)
+				    
+					# return path if neighbour is goal
+				    if friend == goal:
+					    return new_path
+ 
+				# mark node as explored
+			    explored_path.append(node)
+
+		# if there is no path return none
+	    return None
+            
+#
+#
+#
+def main():
+
+	sc = SocialNetwork()
+	g = Graph()
+
+	# sc.prepareNetworkList("dummy_1.txt")
+	# sc.prepareNetworkList("dummy_2.txt")
+	sc.prepareNetworkList("SocialNetwork.txt")
+
+	g.addVertices(sc.getVerticesList())
+	
+	print sc.getCountOfPeopleInNetwork()
+
+	# print nx.shortest_path(g.vertices, 'MYLES_JEFFCOAT', 'MERLIN_MURRUFO')
+
+	# all the names are now in a graph
+	# find the shortest path between two points 
+
+	# print find_shortest_path(g.vertices, 'MYLES_JEFFCOAT', 'MERLIN_MURRUFO')
+	# print (g.findShortestPath('MYLES_JEFFCOAT', 'MERLIN_MURRUFO'))
+	print (g.findShortestPath('STACEY_STRIMPLE', 'RICH_OMLI'))
+	# print (g.findPath('MYLES_JEFFCOAT', 'MERLIN_MURRUFO'))
+    # print find_shortest_path(g.vertices, 'STACEY_STRIMPLE', 'RICH_OMLI')
+
+
 if __name__ == '__main__':
 	
-	sc = SocialNetwork()
-	sc.readFile("dummy_1.txt")
+	# Start the program
+	main()
+
 	
-	# get the names from the name list
-	#print(sc.names_list)
-
-	for names_line in sc.names_list:
-		# strip the names_line of '\r' and '\n', else might result in multiple entries
-		# For e.g. SAM_SWAIT and SAM_SWAIT\r\n
-		names_line = names_line.strip()
-			
-		# parse the file on the delimiter ',' 
-		names_line = names_line.split(',')
-
-		# as per the use case scenario there are two names in a single line
-		for idx in xrange(2):
-			# check if the names are encountered for the first time
-			if (sc.dict_names_objects.has_key(names_line[idx]) != True):
-			#if (names_line[idx] in sc.dict_names_objects != True):
-				sc.dict_names_objects.update({names_line[idx]: Vertex(names_line[idx])})	
-
-			# We have all the names and their objects in a pair now
-			# Next task would be to create a tree for every pair
-			
-		person_1_obj = sc.dict_names_objects[names_line[0]]
-		person_2_obj = sc.dict_names_objects[names_line[1]]
-		person_1_obj.add_friend(person_2_obj)
-
-	print(sc.dict_names_objects['MYLES_JEFFCOAT'].friends)	
-	print(sc.dict_names_objects['LANNY_TIBURCIO'].friends)	
-	print(sc.dict_names_objects['MARTIN_OMERSA'].friends)	
 	
-	# if already present dont add in the list, else add them in the vertex and add in the list
+	
+		
 
 
 
-#all the names have to be a vertex
