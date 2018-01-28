@@ -14,14 +14,10 @@ Append names of the people in a list.
 file_name = "SocialNetwork.txt"
 
 # stores name of the first person
-#person_1 = 'STACEY_STRIMPLE'
-person_2 = 'STACEY_STRIMPLE'
+person_1 = 'STACEY_STRIMPLE'
 
 # stores name of the second person
-#person_2 = 'RICH_OMLI'
-person_1 = 'RICH_OMLI'
-
-
+person_2 = 'RICH_OMLI'
 
 #
 # Class containing details of the social network
@@ -177,12 +173,19 @@ def main():
 
     sc.prepareNetworkList(file_name)
     sc.addVertices(sc.getVerticesList())
-    print sc.getCountOfPeopleInNetwork()
-    print (sc.findShortestPath(person_1, person_2))
-
+    
+    # get total number of people in the network
+    print 'Total number of people in the network:', sc.getCountOfPeopleInNetwork()
+    print('\n')
+    # Get the path from person_1 to person_2
+    path = sc.findShortestPath(person_1, person_2)
+    print 'Path from', person_1, 'to', person_2, ':'
+    print path
+    print('\n')
+    print 'Distance between',person_1,'and',person_2,'is:',(len(path) - 1)
+    print('\n')
 
 if __name__ == '__main__':
-    
     
 
     # Start the program
