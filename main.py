@@ -9,13 +9,11 @@ class SocialNetwork:
 	
 	def __init__(self):
 		# List containing name of all the people in the social network.
-		# self.list_social_network_name = []
-		# self.list_social_network_vertex = []
 		self.list_names = []
 		self.dict_names_objects = {}
 
 	#
-	#
+	# Reads the file, prepares the network list and assigns friends
 	#
 	def prepareNetworkList(self, filename):
 
@@ -47,7 +45,7 @@ class SocialNetwork:
 			person_1_obj.addFriend(person_2_obj)
 	
 	#
-	# 
+	# returns the list of all the names in the network 
 	#
 	def getNameList(self):
 		
@@ -55,7 +53,7 @@ class SocialNetwork:
 		return self.dict_names_objects.keys()
 
 	#
-	# 
+	# Returns list of all the objects in the network 
 	#
 	def getVerticesList(self):
 		
@@ -63,7 +61,7 @@ class SocialNetwork:
 		return self.dict_names_objects.values()	
 
 	#
-	# 
+	# Returns the count of people in the network
 	#
 	def getCountOfPeopleInNetwork(self):
 
@@ -72,7 +70,7 @@ class SocialNetwork:
 
 
 #
-#
+# Vertex Class, 
 #
 class Vertex:
 
@@ -81,7 +79,7 @@ class Vertex:
 		self.friends = []
 
 	#
-	#
+	# Add a friend in the list 
 	#
 	def addFriend(self, friend):
 		if isinstance(friend, Vertex):
@@ -98,7 +96,7 @@ class Vertex:
 			return False
 
 #
-#
+# Graph Class, contains varaibles and related to the graph 
 #
 class Graph:
     
@@ -106,7 +104,7 @@ class Graph:
         self.vertices = {}
 
 	#
-	#
+	# Add the vertices in a graph
 	#
     def addVertices(self, vertices):
         for vertex in vertices:
@@ -114,7 +112,7 @@ class Graph:
 			    self.vertices[vertex.name] = vertex.friends
 
 	#
-	#
+	# Finds the shortest path between two nodes using bfs
 	#
     def findShortestPath(self, start, goal):
 	
@@ -158,31 +156,17 @@ class Graph:
 	    return None
             
 #
-#
+# Main function
 #
 def main():
 
 	sc = SocialNetwork()
 	g = Graph()
 
-	# sc.prepareNetworkList("dummy_1.txt")
-	# sc.prepareNetworkList("dummy_2.txt")
 	sc.prepareNetworkList("SocialNetwork.txt")
-
 	g.addVertices(sc.getVerticesList())
-	
 	print sc.getCountOfPeopleInNetwork()
-
-	# print nx.shortest_path(g.vertices, 'MYLES_JEFFCOAT', 'MERLIN_MURRUFO')
-
-	# all the names are now in a graph
-	# find the shortest path between two points 
-
-	# print find_shortest_path(g.vertices, 'MYLES_JEFFCOAT', 'MERLIN_MURRUFO')
-	# print (g.findShortestPath('MYLES_JEFFCOAT', 'MERLIN_MURRUFO'))
 	print (g.findShortestPath('STACEY_STRIMPLE', 'RICH_OMLI'))
-	# print (g.findPath('MYLES_JEFFCOAT', 'MERLIN_MURRUFO'))
-    # print find_shortest_path(g.vertices, 'STACEY_STRIMPLE', 'RICH_OMLI')
 
 
 if __name__ == '__main__':
@@ -191,9 +175,3 @@ if __name__ == '__main__':
 	main()
 
 	
-	
-	
-		
-
-
-
